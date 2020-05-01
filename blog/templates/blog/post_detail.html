@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'author-detail' post.author.profile.pk %}">{{ post.author }}</a>
+      <small class="text-muted">{{ post.date_posted }}</small>
+      {% if post.author == user %}
+      <a class="mr-2" href="{% url 'post-update' post.pk %}" style="font-size: 24px;">
+      		<i class="fas fa-edit"></i></a>
+      <a class="mr-2" href="{% url 'post-delete' post.pk %}" style="font-size: 24px; color:red;">
+      		<i class="fa fa-trash" aria-hidden="true"></i>
+      </a>
+      {% endif %}
+    </div>
+    <h2 class="article-title">{{ post.title }}</h2>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+</article>
+
+{% endblock content %}

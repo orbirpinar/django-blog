@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<h1 class="mb-3">Yazarlar</h1>
+
+  <table style="width:100%">
+  <tr>
+    <th>Kullanıcı Adı </th>
+    <th>Yazıları</th> 
+    <th>Profili</th>
+  </tr>
+    {% for profile in object_list %}
+      <tr id="book-list">
+        <td>{{ profile.user.username }}</td> 
+        <td><a class="btn btn-success btn-sm" href="{% url 'user-post' profile.user.username %}">Yazıları</a></td>
+        <td><a class="btn btn-success btn-sm" href="{% url 'author-detail' profile.pk %}">Profili</a></td>
+    {% endfor %}
+   </tr>
+</table>
+	
+{% endblock content %}

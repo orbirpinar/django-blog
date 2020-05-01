@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 img">
+     <img class="rounded-circle account-img" src="{{profile.image.url}}">
+    </div>
+    <div class="col-md-6 details">
+      <blockquote>
+      	{%  if object.user.get_full_name %}
+        <h5>{{object.user.get_full_name}} </h5>
+        {% else %}
+        <h5>{{ object.user.username }}</h5>
+        {% endif %}
+        {% if object.location %}	
+        <small><cite title="Source Title">{{object.location}}  <i class="icon-map-marker"></i></cite></small>
+        {% endif %}
+        <br>
+        {% if object.birth_date %}
+        <small><cite title="Source Title">Doğum Tarihi: {{object.birth_date|date:"d.m.Y"}}  <i class="icon-map-marker"></i></cite></small>
+        {% endif %}
+      </blockquote>
+      <h6>Biyografisi:</h6>
+      <p>
+        {{object.bio}} <br>
+        
+      </p>
+    </div>
+  </div>
+  <p>Yazılarına ulaşmak için tıklayınız <a class="btn btn-outline-success btn-sm" href="{% url 'user-post' object.user.username %}">Yazıları</a></p>
+
+
+  </div>
+
+
+{% endblock content %}

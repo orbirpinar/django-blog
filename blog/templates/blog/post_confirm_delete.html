@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            
+               <legend class="border-bottom mb-4">{{object.title}} yazısını silmek istediğine emin misin ? </legend>
+            
+            <div class="form-group">
+                <button class="btn btn-danger" type="submit">Evet</button>
+                <a href="{{object.get_absolute_url}}" class="btn btn-success">Hayır</a>		
+            </div>
+        </form>
+        <div class="border-top pt-3">
+    
+        </div>
+    </div>
+{% endblock content %}
+

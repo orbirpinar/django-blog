@@ -1,0 +1,131 @@
+
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/custom.css' %}">
+    <script src="https://kit.fontawesome.com/5f3fa22d30.js"></script>
+	<!--Eğer titleımız varsa birinci kısma yazdır yoksa sadece 'Blog' yazan titleı yazdır -->
+	{% if title %}
+	<title> Blog-{{title}}</title>
+	{% else %}
+	<title>Blog</title>
+	{% endif %}
+</head>
+<body>
+	<header class="site-header">
+	  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+	    <div class="container">
+	      <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Django Blog</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	      </button>
+	      <div class="collapse navbar-collapse" id="navbarToggle">
+	        <div class="navbar-nav mr-auto">
+	          <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+	          <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+	        </div>
+	        <!-- Navbar Right Side -->
+	        <div class="navbar-nav">
+             <a class="nav-item nav-link" href="{% url 'list-author' %}">Yazarlar</a> 
+            {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="{% url 'create-post' %}">Yeni Gönderi</a>
+            <a class="nav-item nav-link" href="{% url 'profile' %}">Profil Sayfam</a>
+            <a class="nav-item nav-link" href="{% url 'logout' %}">Çıkış Yap</a>
+            {%  else %}
+
+	          <a class="nav-item nav-link" href="{% url 'login' %}">Giriş Yap</a>
+	          <a class="nav-item nav-link" href="{% url 'register' %}">Kayıt Ol</a>
+            {% endif %}
+
+	        </div>
+	      </div>
+	    </div>
+	  </nav>
+	</header>
+	<main role="main" class="container">
+  <div class="row">
+    <div class="col-md-8">
+    	{% if messages %}
+    		{%  for message in messages %}
+    			<div class="alert alert-{{ message.tags }}" >
+    			{{ message }}
+    			</div>
+    		{% endfor %}
+    	{% endif %}
+    {% block content %}{% endblock %}
+    {%  block pagination %}
+    {%  if is_paginated %}
+      <div class="pagination">
+        <nav aria-label="Page navigation"> 
+            <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>   
+            {% endif %}
+
+             {% for n in page_obj.paginator.page_range %}
+                {% if page_obj.number == n %}
+                    <li class="page-item active">
+                    <span id="active-page"  class="page-link">{{ n }}</span>
+                    </li>
+                <!-- Eğer şu anda bulunan sayfadan en fazla 3 sayfa daha az ve en fazla 3 sayfa daha fazla olanları göster demek  -->
+                {% elif n > page_obj.number|add:'-3' and n < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}" aria-label="Previous">
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            {% endif %}   
+            </ul> 
+        </nav>
+      </div>
+      {% endif %}
+      {% endblock pagination %}
+    </div>
+    <div class="col-md-4">
+      <div class="content-section">
+        <h3>Our Sidebar</h3>
+        <p class='text-muted'>You can put any information here you'd like.
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-light">Latest Posts</li>
+            <li class="list-group-item list-group-item-light">Announcements</li>
+            <li class="list-group-item list-group-item-light">Calendars</li>
+            <li class="list-group-item list-group-item-light">etc</li>
+          </ul>
+        </p>
+      </div>
+    </div>
+
+
+
+
+  </div>
+</main>
+	
+
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

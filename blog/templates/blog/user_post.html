@@ -1,0 +1,23 @@
+  <!--base htmldeki herşeyi buraya getiriyor override yapmamış oluyoruz. -->
+{% extends "blog/base.html" %}
+{% block content %}
+<h1 class="mb-3" >{{ view.kwargs.username}} Yazılar ({{ page_obj.paginator.count }})</h1>
+{% for post in posts  %}
+<article class="media content-section">
+  <!-- authorun profilindeki imagein urli-->
+  <img src="{{ post.author.profile.image.url }}" class="rounded-circle article-img">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-1" href="{%  url 'author-detail' post.author.profile.pk %}">{{ post.author }}</a>
+      <small class="text-muted">{{ post.date_posted| date:"d.m.Y" }}</small>
+    </div>
+    <h2><a class="article-title" href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+    <p class="article-content">{{ post.content }}  </p>
+  </div>
+</article>
+{% endfor %}
+  
+    <!-- Pythondan farklı olarak dictinaryi çağırırken [] kullanmıyoruz sadece nokta kullanıyoruz-->
+    <!--blokc content içindeki her kod base html de {block content } olan yerde gözükücek--->
+  
+{% endblock content %}
